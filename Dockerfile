@@ -1,6 +1,6 @@
 FROM php:7.1-apache
 
-LABEL maintainer "Mark Hobson <mark.hobson@blackpepper.co.uk>"
+LABEL maintainer "Nic Masters <nic@nicmasters.com>"
 
 RUN apt-get update \
 	&& apt-get install -yq unzip libmcrypt-dev libmagickwand-dev \
@@ -22,15 +22,7 @@ RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& rm /tmp/$CRAFT_ZIP \
 	&& mv /var/www/public/* /var/www/html/ \
 	&& mv /var/www/html/htaccess /var/www/html/.htaccess \
-	&& rmdir /var/www/public
-
-# Allow Craft to be configured with environment variables
-ADD db.php general.php /var/www/craft/config/
-
-RUN chown -R www-data:www-data \
-	/var/www/craft/app/ \
-	/var/www/craft/config/ \
-	/var/www/craft/storage/ \
+	&& rmdir /var/www/public \
 	&& mkdir -p /tmp/www/html \
 	&& mkdir -p /tmp/www/craft/templates \
 	&& mkdir -p /tmp/www/craft/plugins \
@@ -40,6 +32,14 @@ RUN chown -R www-data:www-data \
 	&& cp -r /var/www/craft/templates /tmp/www/craft/ \
 	&& cp -r /var/www/craft/plugins /tmp/www/craft/ \
 	&& cp -r /var/www/craft/config /tmp/www/craft/ 
+
+# Allow Craft to be configured with environment variables
+ADD db.php general.php /tmp/www/craft/config/
+
+RUN chown -R www-data:www-data \
+	/var/www/craft/app/ \
+	/var/www/craft/config/ \
+	/var/www/craft/storage/
 
 ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_DATABASE_PORT=3306 \
