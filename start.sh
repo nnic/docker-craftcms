@@ -14,10 +14,18 @@ cp -r /tmp/www/craft/templates /var/www/craft/
 fi
 
 if [ "$(ls -A /var/www/craft/plugins)" ]; then
-echo "Directory already cloned"
+echo "Plugin directory already cloned"
 else
 echo "Plugin files do not exist" ;
 cp -r /tmp/www/craft/plugins /var/www/craft/
 fi
+
+if [ "$(ls -A /var/www/craft/config)" ]; then
+echo "Config directory already cloned"
+else
+echo "Config files do not exist" ;
+cp -r /tmp/www/craft/config /var/www/craft/
+fi
+
 
 docker-php-entrypoint apache2-foreground

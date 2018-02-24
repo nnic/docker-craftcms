@@ -22,13 +22,7 @@ RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& rm /tmp/$CRAFT_ZIP \
 	&& mv /var/www/public/* /var/www/html/ \
 	&& mv /var/www/html/htaccess /var/www/html/.htaccess \
-	&& rmdir /var/www/public \ 
-	&& mkdir -p /tmp/www/html \
-	&& mkdir -p /tmp/www/craft/templates \
-	&& mkdir -p /tmp/www/craft/plugins \
-	&& cp -r /var/www/html /tmp/www/ \
-	&& cp -r /var/www/craft/templates /tmp/www/craft/ \
-	&& cp -r /var/www/craft/plugins /tmp/www/craft/ 
+	&& rmdir /var/www/public
 
 # Allow Craft to be configured with environment variables
 ADD db.php general.php /var/www/craft/config/
@@ -36,7 +30,16 @@ ADD db.php general.php /var/www/craft/config/
 RUN chown -R www-data:www-data \
 	/var/www/craft/app/ \
 	/var/www/craft/config/ \
-	/var/www/craft/storage/
+	/var/www/craft/storage/ \
+	&& mkdir -p /tmp/www/html \
+	&& mkdir -p /tmp/www/craft/templates \
+	&& mkdir -p /tmp/www/craft/plugins \
+	&& mkdir -p /tmp/www/craft/config \
+	&& mkdir -p /tmp/www/craft/ \
+	&& cp -r /var/www/html /tmp/www/ \
+	&& cp -r /var/www/craft/templates /tmp/www/craft/ \
+	&& cp -r /var/www/craft/plugins /tmp/www/craft/ \
+	&& cp -r /var/www/craft/config /tmp/www/craft/ 
 
 ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_DATABASE_PORT=3306 \
@@ -51,7 +54,7 @@ ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_USE_COMPRESSED_JS=true \
 	CRAFT_USER_SESSION_DURATION=PT1H
 
-VOLUME ["/var/www/html", "/var/www/craft/templates", "/var/www/craft/plugins"]
+VOLUME ["/var/www/html", "/var/www/craft/templates", "/var/www/craft/plugins",  "/var/www/craft/config"]
 
 COPY start.sh /start.sh
 

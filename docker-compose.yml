@@ -13,6 +13,7 @@ craftcms:
    - ./src/public:/var/www/html
    - ./src/craft/templates:/var/www/craft/templates
    - ./src/craft/plugins:/var/www/craft/plugins
+   - ./src/craft/config:/var/www/craft/config
 
 database:
   image: webhippie/mariadb:latest
