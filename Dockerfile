@@ -13,7 +13,7 @@ RUN apt-get update \
 RUN a2enmod rewrite
 
 ARG CRAFT_VERSION=2.6
-ARG CRAFT_BUILD=3004
+ARG CRAFT_BUILD=3011
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
 
 ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRAFT_BUILD/$CRAFT_ZIP /tmp/$CRAFT_ZIP
@@ -22,7 +22,13 @@ RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& rm /tmp/$CRAFT_ZIP \
 	&& mv /var/www/public/* /var/www/html/ \
 	&& mv /var/www/html/htaccess /var/www/html/.htaccess \
-	&& rmdir /var/www/public
+	&& rmdir /var/www/public \ 
+	&& mkdir -p /tmp/www/html \
+	&& mkdir -p /tmp/www/craft/templates \
+	&& mkdir -p /tmp/www/craft/plugins \
+	&& cp -r /var/www/html /tmp/www/ \
+	&& cp -r /var/www/craft/templates /tmp/www/craft/ \
+	&& cp -r /var/www/craft/plugins /tmp/www/craft/ 
 
 # Allow Craft to be configured with environment variables
 ADD db.php general.php /var/www/craft/config/
@@ -44,3 +50,11 @@ ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_OMIT_SCRIPT_NAME_IN_URLS=auto \
 	CRAFT_USE_COMPRESSED_JS=true \
 	CRAFT_USER_SESSION_DURATION=PT1H
+
+VOLUME ["/var/www/html", "/var/www/craft/templates", "/var/www/craft/plugins"]
+
+COPY start.sh /start.sh
+
+RUN chmod -v +x /start.sh
+
+CMD ["/start.sh"]
