@@ -1,6 +1,6 @@
 # docker-craftcms
 
-Docker image for [Craft CMS](https://craftcms.com/). Available on Docker Hub as [blackpepper/craftcms](https://hub.docker.com/r/blackpepper/craftcms/).
+Docker image for [Craft CMS](https://craftcms.com/). Available on Docker Hub as [nnic/craftcms](https://hub.docker.com/r/nnic/craftcms/).
 
 ## Usage
 
@@ -25,7 +25,7 @@ docker run --name craftcms \
 	-e CRAFT_DATABASE_NAME=craft \
 	--link database \
 	-p 8080:80 \
-	-d blackpepper/craftcms
+	-d nnic/craftcms
 ```
 
 Visit http://localhost:8080/admin to create a site.
@@ -36,7 +36,7 @@ Alternatively use Docker Compose:
 
 ```YAML
 craftcms:
-  image: blackpepper/craftcms
+  image: nnic/craftcms
   environment:
     CRAFT_DATABASE_HOST: database
     CRAFT_DATABASE_USER: craft
@@ -85,7 +85,7 @@ Assets | `CRAFT_MAX_UPLOAD_FILE_SIZE` | [`maxUploadFileSize`](https://craftcms.c
 Use as a base image to customise Craft templates and public assets:
 
 ```Dockerfile
-FROM blackpepper/craftcms
+FROM nnic/craftcms
 
 ADD templates /var/www/craft/templates
 ADD public /var/www/html
