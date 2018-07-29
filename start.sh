@@ -1,31 +1,37 @@
 #!/bin/bash
-if [ "$(ls -A /var/www/html)" ]; then
+if [ "$(ls -A /var/www/web)" ]; then
 echo "Public html directory already cloned"
 else
 echo "Public html files do not exist" ;
-cp -r /tmp/www/html /var/www/ 
+cp -r /tmp/www/web /var/www/ 
 fi
 
-if [ "$(ls -A /var/www/craft/templates)" ]; then
+if [ "$(ls -A /var/www/templates)" ]; then
 echo "Template directory already cloned"
 else
 echo "Template files do not exist" ;
-cp -r /tmp/www/craft/templates /var/www/craft/
+cp -r /tmp/www/templates /var/www/
 fi
 
-if [ "$(ls -A /var/www/craft/plugins)" ]; then
-echo "Plugin directory already cloned"
+if [ "$(ls -A /var/www/plugins)" ]; then
+echo "Modules directory already cloned"
 else
-echo "Plugin files do not exist" ;
-cp -r /tmp/www/craft/plugins /var/www/craft/
+echo "Modules files do not exist" ;
+cp -r /tmp/www/modules /var/www/
 fi
 
-if [ "$(ls -A /var/www/craft/config)" ]; then
+if [ "$(ls -A /var/www/config)" ]; then
 echo "Config directory already cloned"
 else
 echo "Config files do not exist" ;
-cp -r /tmp/www/craft/config /var/www/craft/
+cp -r /tmp/www/config /var/www/
 fi
 
+if [ "$(ls -A /var/www/storage)" ]; then
+echo "Storage directory already cloned"
+else
+echo "Storage files do not exist" ;
+cp -r /tmp/www/storage /var/www/
+fi
 
 docker-php-entrypoint apache2-foreground

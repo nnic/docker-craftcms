@@ -12,34 +12,34 @@ RUN apt-get update \
 # Enable .htaccess
 RUN a2enmod rewrite
 
-ARG CRAFT_VERSION=2.6
-ARG CRAFT_BUILD=3011
-ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
+ARG CRAFT_BUILD=3.0.17.1
+ENV CRAFT_ZIP=Craft-$CRAFT_BUILD.zip
 
-ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRAFT_BUILD/$CRAFT_ZIP /tmp/$CRAFT_ZIP
+ADD https://download.craftcdn.com/craft/3.0/$CRAFT_ZIP /tmp/$CRAFT_ZIP
 
 RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& rm /tmp/$CRAFT_ZIP \
-	&& mv /var/www/public/* /var/www/html/ \
-	&& mv /var/www/html/htaccess /var/www/html/.htaccess \
-	&& rmdir /var/www/public \
-	&& mkdir -p /tmp/www/html \
-	&& mkdir -p /tmp/www/craft/templates \
-	&& mkdir -p /tmp/www/craft/plugins \
-	&& mkdir -p /tmp/www/craft/config \
-	&& mkdir -p /tmp/www/craft/ \
-	&& cp -r /var/www/html /tmp/www/ \
-	&& cp -r /var/www/craft/templates /tmp/www/craft/ \
-	&& cp -r /var/www/craft/plugins /tmp/www/craft/ \
-	&& cp -r /var/www/craft/config /tmp/www/craft/ 
+	&& mkdir -p /tmp/www/web \
+	&& mkdir -p /tmp/www/templates \
+	&& mkdir -p /tmp/www/plugins \
+	&& mkdir -p /tmp/www/config \
+	&& mkdir -p /tmp/www/storage/ \
+	&& mkdir -p /tmp/www/modules/ \
+	&& cp -r /var/www/web /tmp/www/ \
+	&& cp -r /var/www/templates /tmp/www/ \
+	&& cp -r /var/www/plugins /tmp/www/ \
+	&& cp -r /var/www/config /tmp/www/ \
+	&& cp -r /var/www/storage /tmp/www/ \
+	&& cp -r /var/www/modules /tmp/www/ 
 
 # Allow Craft to be configured with environment variables
-ADD db.php general.php /tmp/www/craft/config/
+ADD db.php general.php /tmp/www/config/
+ADD .env /var/www/
 
 RUN chown -R www-data:www-data \
-	/var/www/craft/app/ \
-	/var/www/craft/config/ \
-	/var/www/craft/storage/
+	/var/www/storage/ \
+	/var/www/vendor/ \
+	/var/www/web/cpresources/
 
 ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_DATABASE_PORT=3306 \
@@ -54,7 +54,7 @@ ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_USE_COMPRESSED_JS=true \
 	CRAFT_USER_SESSION_DURATION=PT1H
 
-VOLUME ["/var/www/html", "/var/www/craft/templates", "/var/www/craft/plugins",  "/var/www/craft/config"]
+VOLUME ["/var/www/web", "/var/www/templates", "/var/www/modules",  "/var/www/config", "/var/www/storage"]
 
 COPY start.sh /start.sh
 
