@@ -7,15 +7,17 @@ services:
       CRAFT_DATABASE_USER: craft
       CRAFT_DATABASE_PASSWORD: password
       CRAFT_DATABASE_NAME: craft
+      CRAFT_DEV_MODE: "true"
     links:
       - database
     ports:
       - "8881:80"
     volumes:
-    - ./src/public:/var/www/html
-    - ./src/craft/templates:/var/www/craft/templates
-    - ./src/craft/plugins:/var/www/craft/plugins
-    - ./src/craft/config:/var/www/craft/config
+    - ./src/web:/var/www/web
+    - ./src/templates:/var/www/templates
+    - ./src/plugins:/var/www/plugins
+    - ./src/config:/var/www/config
+    - ./src/modules:/var/www/modules
 
   database:
     image: webhippie/mariadb:latest
@@ -28,6 +30,17 @@ services:
       - "3306:3306"
     volumes:
     - data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+     - 8882:80
+    links:
+     - database
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: password
 
 volumes:
   data:

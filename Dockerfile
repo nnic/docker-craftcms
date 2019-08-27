@@ -2,8 +2,10 @@ FROM php:7.1-apache
 
 LABEL maintainer "Nic Masters <nic@nicmasters.com>"
 
+WORKDIR /var/www
+
 RUN apt-get update \
-	&& apt-get install -yq unzip libmcrypt-dev libmagickwand-dev \
+	&& apt-get install -yq unzip libmcrypt-dev libmagickwand-dev wget mariadb-client \
 	&& docker-php-ext-install zip pdo_mysql mcrypt \
 	&& pecl install imagick \
 	&& docker-php-ext-enable imagick \
@@ -27,10 +29,15 @@ RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& mkdir -p /tmp/www/modules/ \
 	&& cp -r /var/www/web /tmp/www/ \
 	&& cp -r /var/www/templates /tmp/www/ \
-	&& cp -r /var/www/plugins /tmp/www/ \
 	&& cp -r /var/www/config /tmp/www/ \
 	&& cp -r /var/www/storage /tmp/www/ \
-	&& cp -r /var/www/modules /tmp/www/ 
+	&& cp -r /var/www/modules /tmp/www/ \
+	&& chmod +x /var/www/craft \
+	&& sed -i "s/html/web/" /etc/apache2/sites-available/000-default.conf \
+	&& rm -r /var/www/html \
+	&& chown -R www-data:www-data /var/www/* /var/www/.[^.]* \
+	&& echo "php_value memory_limit 256M" >> /var/www/web/.htaccess \
+	&& service apache2 restart
 
 # Allow Craft to be configured with environment variables
 ADD db.php general.php /tmp/www/config/
@@ -41,18 +48,14 @@ RUN chown -R www-data:www-data \
 	/var/www/vendor/ \
 	/var/www/web/cpresources/
 
+RUN truncate -s0 /var/www/.env
+
 ENV CRAFT_DATABASE_HOST=localhost \
 	CRAFT_DATABASE_PORT=3306 \
 	CRAFT_DATABASE_USER=root \
-	CRAFT_DATABASE_PASSWORD= \
-	CRAFT_DATABASE_NAME= \
-	CRAFT_ALLOW_AUTO_UPDATES=true \
-	CRAFT_COOLDOWN_DURATION=PT5M \
-	CRAFT_DEV_MODE=false \
-	CRAFT_MAX_UPLOAD_FILE_SIZE=16777216 \
-	CRAFT_OMIT_SCRIPT_NAME_IN_URLS=auto \
-	CRAFT_USE_COMPRESSED_JS=true \
-	CRAFT_USER_SESSION_DURATION=PT1H
+	CRAFT_DATABASE_PASSWORD="" \
+	CRAFT_DATABASE_NAME="" \
+	CRAFT_DEV_MODE="false"
 
 VOLUME ["/var/www/web", "/var/www/templates", "/var/www/modules",  "/var/www/config", "/var/www/storage"]
 
