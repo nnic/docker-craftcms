@@ -14,10 +14,10 @@ RUN apt-get update \
 # Enable .htaccess
 RUN a2enmod rewrite
 
-ARG CRAFT_BUILD=3.0.41
+ARG CRAFT_BUILD=3.3.0
 ENV CRAFT_ZIP=Craft-$CRAFT_BUILD.zip
 
-ADD https://download.craftcdn.com/craft/3.0/$CRAFT_ZIP /tmp/$CRAFT_ZIP
+ADD https://download.craftcdn.com/craft/3.3/$CRAFT_ZIP /tmp/$CRAFT_ZIP
 
 RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& rm /tmp/$CRAFT_ZIP \
