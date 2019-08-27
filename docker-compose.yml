@@ -1,28 +1,33 @@
-craftcms:
-  build: .
-  environment:
-    CRAFT_DATABASE_HOST: database
-    CRAFT_DATABASE_USER: craft
-    CRAFT_DATABASE_PASSWORD: password
-    CRAFT_DATABASE_NAME: craft
-  links:
-    - database
-  ports:
-    - "8080:80"
-  volumes:
-   - ./src/public:/var/www/html
-   - ./src/craft/templates:/var/www/craft/templates
-   - ./src/craft/plugins:/var/www/craft/plugins
-   - ./src/craft/config:/var/www/craft/config
+version: '2'
+services:
+  craftcms:
+    build: .
+    environment:
+      CRAFT_DATABASE_HOST: database
+      CRAFT_DATABASE_USER: craft
+      CRAFT_DATABASE_PASSWORD: password
+      CRAFT_DATABASE_NAME: craft
+    links:
+      - database
+    ports:
+      - "8881:80"
+    volumes:
+    - ./src/public:/var/www/html
+    - ./src/craft/templates:/var/www/craft/templates
+    - ./src/craft/plugins:/var/www/craft/plugins
+    - ./src/craft/config:/var/www/craft/config
 
-database:
-  image: webhippie/mariadb:latest
-  environment:
-    MARIADB_ROOT_PASSWORD: password
-    MARIADB_USERNAME: craft
-    MARIADB_PASSWORD: password
-    MARIADB_DATABASE: craft
-  ports:
-    - "3306:3306"
-  volumes:
-   - data:/var/lib/mysql
+  database:
+    image: webhippie/mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_USERNAME: craft
+      MARIADB_PASSWORD: password
+      MARIADB_DATABASE: craft
+    ports:
+      - "3306:3306"
+    volumes:
+    - data:/var/lib/mysql
+
+volumes:
+  data:
