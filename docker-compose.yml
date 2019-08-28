@@ -3,11 +3,13 @@ services:
   craftcms:
     build: .
     environment:
-      CRAFT_DATABASE_HOST: database
-      CRAFT_DATABASE_USER: craft
-      CRAFT_DATABASE_PASSWORD: password
-      CRAFT_DATABASE_NAME: craft
+      DB_SERVER: database
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_DATABASE: craft
+      DB_PORT: 3306
       CRAFT_DEV_MODE: "true"
+      SECURITY_KEY: hB9stszeyGNVaeoT2Pqu6dLAXruox
     links:
       - database
     ports:
@@ -15,7 +17,6 @@ services:
     volumes:
     - ./src/web:/var/www/web
     - ./src/templates:/var/www/templates
-    - ./src/plugins:/var/www/plugins
     - ./src/config:/var/www/config
     - ./src/modules:/var/www/modules
 

@@ -13,13 +13,6 @@ echo "Template files do not exist" ;
 cp -r /tmp/www/templates /var/www/
 fi
 
-if [ "$(ls -A /var/www/plugins)" ]; then
-echo "Modules directory already cloned"
-else
-echo "Modules files do not exist" ;
-cp -r /tmp/www/modules /var/www/
-fi
-
 if [ "$(ls -A /var/www/config)" ]; then
 echo "Config directory already cloned"
 else
