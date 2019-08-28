@@ -27,4 +27,11 @@ echo "Storage files do not exist" ;
 cp -r /tmp/www/storage /var/www/
 fi
 
+if [ "$(ls -A /var/www/vendor)" ]; then
+echo "Vendor directory already cloned"
+else
+echo "Vendor files do not exist" ;
+cp -r /tmp/www/vendor /var/www/
+fi
+
 docker-php-entrypoint apache2-foreground

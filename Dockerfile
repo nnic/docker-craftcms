@@ -27,11 +27,13 @@ RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& mkdir -p /tmp/www/config \
 	&& mkdir -p /tmp/www/storage/ \
 	&& mkdir -p /tmp/www/modules/ \
+	&& mkdir -p /tmp/www/vendor/ \
 	&& cp -r /var/www/web /tmp/www/ \
 	&& cp -r /var/www/templates /tmp/www/ \
 	&& cp -r /var/www/config /tmp/www/ \
 	&& cp -r /var/www/storage /tmp/www/ \
 	&& cp -r /var/www/modules /tmp/www/ \
+	&& cp -r /var/www/vendor /tmp/www/ \
 	&& chmod +x /var/www/craft \
 	&& sed -i "s/html/web/" /etc/apache2/sites-available/000-default.conf \
 	&& rm -r /var/www/html \
@@ -61,7 +63,7 @@ ENV DB_DRIVER="mysql" \
 	DB_TABLE_PREFIX="craft" \
 	CRAFT_DEV_MODE="false"
 
-VOLUME ["/var/www/web", "/var/www/templates", "/var/www/modules",  "/var/www/config", "/var/www/storage"]
+VOLUME ["/var/www/web", "/var/www/templates", "/var/www/modules",  "/var/www/config", "/var/www/storage", "/var/www/vendor"]
 
 COPY start.sh /start.sh
 
