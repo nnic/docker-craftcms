@@ -14,6 +14,9 @@ RUN apt-get update \
 # Enable .htaccess
 RUN a2enmod rewrite
 
+RUN curl -sS https://getcomposer.org/installer | php \
+&& mv composer.phar /usr/local/bin/composer
+
 ARG CRAFT_BUILD=3.3.0
 ENV CRAFT_ZIP=Craft-$CRAFT_BUILD.zip
 
