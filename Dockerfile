@@ -17,10 +17,11 @@ RUN a2enmod rewrite
 RUN curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer
 
-ARG CRAFT_BUILD=3.3.0
+ARG CRAFT_VERSION=3.5
+ARG CRAFT_BUILD=3.5.18
 ENV CRAFT_ZIP=Craft-$CRAFT_BUILD.zip
 
-ADD https://download.craftcdn.com/craft/3.3/$CRAFT_ZIP /tmp/$CRAFT_ZIP
+ADD https://download.craftcdn.com/craft/$CRAFT_VERSION/$CRAFT_ZIP /tmp/$CRAFT_ZIP
 
 RUN unzip -q /tmp/$CRAFT_ZIP -d /var/www/ \
 	&& rm /tmp/$CRAFT_ZIP \
